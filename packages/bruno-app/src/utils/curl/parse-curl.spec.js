@@ -929,4 +929,53 @@ describe('parseCurlCommand', () => {
       });
     });
   });
+
+  describe('--url Flag', () => {
+    it('should parse URL from --url flag', () => {
+      const result = parseCurlCommand(`
+        curl --url https://api.example.com/users
+      `);
+
+      expect(result).toEqual({
+        method: 'get',
+        url: 'https://api.example.com/users',
+        urlWithoutQuery: 'https://api.example.com/users'
+      });
+    });
+
+    it('should parse URL from --url flag with other options', () => {
+      const result = parseCurlCommand(`
+        curl --request POST \
+             --url https://api.example.com/users \
+             --header 'Content-Type: application/json' \
+             --data '{"name":"John"}'
+      `);
+
+      expect(result).toEqual({
+        method: 'post',
+        url: 'https://api.example.com/users',
+        urlWithoutQuery: 'https://api.example.com/users',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: '{"name":"John"}'
+      });
+    });
+
+    it('should parse --url flag with query parameters', () => {
+      const result = parseCurlCommand(`
+        curl --url 'https://api.example.com/users?page=1&limit=10'
+      `);
+
+      expect(result).toEqual({
+        method: 'get',
+        url: 'https://api.example.com/users?page=1&limit=10',
+        urlWithoutQuery: 'https://api.example.com/users',
+        queries: [
+          { name: 'page', value: '1' },
+          { name: 'limit', value: '10' }
+        ]
+      });
+    });
+  });
 });

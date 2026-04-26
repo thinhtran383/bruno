@@ -18,6 +18,7 @@ const FLAG_CATEGORIES = {
   'method': ['-X', '--request'],
   'cookie': ['-b', '--cookie'],
   'form': ['-F', '--form'],
+  'url': ['--url'],
   // Special data flags with properties
   'data-raw': ['--data-raw'],
   'data-binary': ['--data-binary'],
@@ -127,6 +128,7 @@ const handleFlagCategory = (category, arg, request) => {
     case 'method':
     case 'cookie':
     case 'form':
+    case 'url':
       return category;
 
     // Special data flags (set properties and return 'data' state)
@@ -183,7 +185,8 @@ const handleValue = (value, state, request) => {
     'form': () => setFormData(request, value),
     'user': () => setAuth(request, value),
     'method': () => setMethod(request, value),
-    'cookie': () => setCookie(request, value)
+    'cookie': () => setCookie(request, value),
+    'url': () => setURL(request, value)
   };
 
   const handler = valueHandlers[state];

@@ -10,7 +10,9 @@ import {
   updateRequestGraphqlQuery,
   updateRequestGraphqlVariables,
   updateRequestAuthMode,
-  updateAuth
+  updateAuth,
+  setFormUrlEncodedParams,
+  setMultipartFormParams
 } from 'providers/ReduxStore/slices/collections';
 import { saveRequest, cancelRequest } from 'providers/ReduxStore/slices/collections/actions';
 import { getRequestFromCurlCommand } from 'utils/curl';
@@ -289,13 +291,21 @@ const QueryUrl = ({ item, collection, handleRun }) => {
             );
           }
         } else if (bodyMode === 'formUrlEncoded' && request.body.formUrlEncoded) {
-          // For formUrlEncoded, we need to set each param individually
-          // This is a limitation - we'd need to clear existing params first
-          // For now, we'll set the body mode and the user can manually adjust
-          // TODO: Implement proper formUrlEncoded param setting
+          dispatch(
+            setFormUrlEncodedParams({
+              collectionUid: collection.uid,
+              itemUid: item.uid,
+              params: request.body.formUrlEncoded
+            })
+          );
         } else if (bodyMode === 'multipartForm' && request.body.multipartForm) {
-          // For multipartForm, similar limitation
-          // TODO: Implement proper multipartForm param setting
+          dispatch(
+            setMultipartFormParams({
+              collectionUid: collection.uid,
+              itemUid: item.uid,
+              params: request.body.multipartForm
+            })
+          );
         }
       }
 
