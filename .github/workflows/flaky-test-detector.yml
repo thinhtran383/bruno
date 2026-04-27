@@ -1,6 +1,7 @@
 name: Flaky Test Detector
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
