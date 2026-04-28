@@ -75,7 +75,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mac-artifacts
-          path: packages/bruno-electron/out/*.dmg
+          path: |
+            packages/bruno-electron/out/*.dmg
+            packages/bruno-electron/out/*.pkg
+            packages/bruno-electron/out/*.zip
           retention-days: 7
 
   build-windows:
